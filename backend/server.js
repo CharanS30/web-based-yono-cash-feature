@@ -33,5 +33,16 @@ mongoose
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.error("❌ MongoDB connection error:", err));
 
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "login_page.html"));
+});
+
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api/")) return res.status(404).send("Not found");
+  res.sendFile(path.join(__dirname, "..", "public", "login_page.html"));
+});
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
