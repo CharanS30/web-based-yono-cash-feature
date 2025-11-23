@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual ATM - YONO Cash</title>
+  <style>
+    :root {
+      --atm-blue-1: #3db2ff;
+      --atm-blue-2: #1565c0;
+      --atm-navy: #0b1a2b;
+      --metal-1: #2b313c;
+      --metal-2: #1f2430;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-yellow: #ffd54f;
+      --yono: #ff9f1a;
+    }
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:radial-gradient(1200px 600px at 50% 10%, var(--atm-blue-1), var(--atm-blue-2) 60%, #082243 100%); min-height:100vh; display:flex; align-items:center; justify-content:center }
+    .atm-body { width:960px; height:660px; background:linear-gradient(180deg,var(--metal-1),var(--metal-2)); border-radius:22px; box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 2px 0 rgba(255,255,255,.06); display:flex; flex-direction:column; align-items:center; padding:18px 22px 22px; position:relative; color:#e5e7eb }
+    .atm-header{ width:100%; display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom:10px; font-weight:700; font-size:22px; text-shadow:0 2px 4px rgba(0,0,0,.35) }
+    .sbi-logo{ width:22px; height:22px; border-radius:50%; background:#1e88e5; position:relative; box-shadow:inset 0 0 0 4px #1976d2 }
+    .sbi-logo::after{ content:""; position:absolute; left:50%; top:50%; width:6px; height:10px; background:#0b1a2b; transform:translate(-50%,-10%); border-bottom-left-radius:4px; border-bottom-right-radius:4px }
+    .atm-buttons{ position:absolute; top:120px; display:flex; flex-direction:column; gap:20px }
+    .left-buttons{ left:40px } .right-buttons{ right:40px } .atm-buttons div{ width:54px; height:32px; background:#3a3f4b; border-radius:6px }
+    .atm-screen{ width:710px; height:360px; background:var(--atm-navy); border:8px solid #4b5563; border-radius:14px; box-shadow:inset 0 0 18px rgba(0,0,0,.85); padding:22px; color:#e5e7eb; text-align:center; position:relative; overflow:hidden }
+    .atm-screen h2{ margin:0 0 8px; font-size:22px } .muted{ color:#cbd5e1 }
+    .btn{ background:#475569; color:#fff; padding:10px 18px; border:none; border-radius:8px; margin:6px; cursor:pointer; font-weight:700 }
+    .btn:hover{ filter:brightness(1.08) } .btn-confirm{ background:var(--accent-green); color:#081b10 } .btn-cancel{ background:var(--accent-red) } .btn-yono{ background:var(--yono); color:#1a1306 }
+    .input-box{ font-size:22px; padding:10px 12px; border-radius:8px; border:none; width:240px; text-align:center; background:#f8fafc; color:#111; outline:none; letter-spacing:3px; position:relative }
+    .focused::after{ content:"|"; position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#111; animation:blink 1s step-start infinite }
+    @keyframes blink{ 50%{ opacity:0 } }
+    .success{ color:#22c55e; font-size:22px; font-weight:700 } .declined{ color:#ff6b6b; font-size:22px; font-weight:700 } .processing{ color:#93c5fd; font-weight:700 }
+    .dots span{ animation:dot 1.2s infinite } .dots span:nth-child(2){ animation-delay:.2s } .dots span:nth-child(3){ animation-delay:.4s }
+    @keyframes dot{ 0%,20%{opacity:0} 50%{opacity:1} 100%{opacity:0} }
+    .atm-keypad{ margin-top:20px; display:grid; grid-template-columns:repeat(3,80px); gap:16px } .key{ width:80px; height:54px; background:#424856; color:#fff; font-size:18px; border:none; border-radius:8px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.55), inset 0 -2px 0 rgba(255,255,255,.05) }
+    .card-slot{ width:200px; height:20px; background:#000; border:2px solid #666; margin-top:16px; border-radius:4px } .receipt-slot{ width:150px; height:10px; background:#000; border:2px solid #666; margin-top:10px; border-radius:4px }
+  </style>
+</head>
+<body>
+  <div class="atm-body">
+    <div class="atm-header"><div class="sbi-logo"></div><div>Virtual ATM</div></div>
+
+    <div class="atm-buttons left-buttons"><div></div><div></div><div></div><div></div></div>
+    <div class="atm-buttons right-buttons"><div></div><div></div><div></div><div></div></div>
+
+    <div class="atm-screen">
+      <div id="atmContent">
+        <h2>Welcome</h2>
+        <p class="muted">Select Transaction</p>
+        <div>
+          <button class="btn btn-yono" onclick="goToYonoDeposit()">DEPOSIT CASH</button>
+          <button class="btn btn-yono" onclick="goToYonoWithdraw()">WITHDRAW CASH</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="atm-keypad">
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key" onclick="clearInput()">CLR</button>
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key" onclick="backspace()">⌫</button>
+    </div>
+
+    <div class="card-slot"></div>
+    <div class="receipt-slot"></div>
+  </div>
+
+<script>
+  // Global transaction type so success message knows whether to show Dispensed or Credited
+  let transactionType = "withdraw";
+
+  // State variables
+  let step = "home";
+  let activeInput = null;
+  let enteredAmount = "";
+  let enteredRef = "";
+  let depositContext = { referenceNumber: null, accountNumber: null, pendingAmount: 0 };
+
+  function setScreen(html) { document.getElementById('atmContent').innerHTML = html; }
+
+  function resetDepositContext() {
+    depositContext = { referenceNumber: null, accountNumber: null, pendingAmount: 0 };
+  }
+
+  // Show initial ATM home screen (Welcome)
+  function goHome() {
+    step = 'home';
+    // do NOT reset transactionType here (we may want to keep last type)
+    resetDepositContext();
+    setScreen(`
+      <h2>Welcome</h2>
+      <p class="muted">Select Transaction</p>
+      <div>
+        <button class="btn btn-yono" onclick="goToYonoDeposit()">DEPOSIT CASH</button>
+        <button class="btn btn-yono" onclick="goToYonoWithdraw()">WITHDRAW CASH</button>
+      </div>
+    `);
+    activeInput = null;
+  }
+
+  /* ----- WITHDRAW Flow ----- */
+
+  function goToYonoWithdraw() {
+    transactionType = "withdraw";
+    step = 'yono-withdraw';
+    setScreen(`
+      <h2>YONO Cash Withdrawal</h2>
+      <p class="muted">Use the reference number received on your registered mail</p>
+      <div>
+        <button class="btn btn-confirm" onclick="enterRefWithdraw()">PROCEED</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+  }
+
+  function enterRefWithdraw() {
+    step = 'ref-withdraw';
+    setScreen(`
+      <h2>Enter 6-digit Reference Number</h2>
+      <input type="text" id="refInput" class="input-box" maxlength="6" readonly>
+      <div id="refError" class="muted" style="height:22px;color:#ffb4b4"></div>
+      <div>
+        <button class="btn btn-confirm" id="refConfirm" onclick="enterAmountWithdraw()" disabled>CONFIRM</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+    activeInput = document.getElementById('refInput'); activeInput.classList.add('focused');
+  }
+
+  function enterAmountWithdraw() {
+    const refVal = document.getElementById('refInput').value || '';
+    if (refVal.length !== 6) {
+      const el = document.getElementById('refError'); if (el) el.textContent = 'Please enter a valid 6-digit reference number';
+      return;
+    }
+    enteredRef = refVal;
+    step = 'amount-withdraw';
+    setScreen(`
+      <h2>Enter Amount</h2>
+      <input type="text" id="amtInput" class="input-box" maxlength="5" readonly>
+      <div id="amtError" class="muted" style="height:22px;color:#ffb4b4"></div>
+      <div>
+        <button class="btn btn-confirm" id="amtConfirm" onclick="validateRefAndAmount()" disabled>CONFIRM</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+    activeInput = document.getElementById('amtInput'); activeInput.classList.add('focused');
+  }
+
+  async function validateRefAndAmount() {
+    const amtBox = document.getElementById('amtInput');
+    enteredAmount = amtBox ? amtBox.value : "";
+    if (!enteredAmount) { document.getElementById('amtError').textContent = "Please enter amount."; return; }
+    step = 'processing1';
+    setScreen(`<h2 class="processing">Transaction in Process <span class="dots"><span>.</span><span>.</span><span>.</span></span></h2><p class="muted">Please wait</p>`);
+    try {
+      const res = await fetch("/api/atm/validate", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ referenceNumber: enteredRef, amount: Number(enteredAmount) })
+      });
+      const data = await res.json();
+      if (data.success) { setTimeout(enterYonoCode, 1200); } else { setTimeout(showDeclined, 1200); }
+    } catch (err) { console.error("Error validating ref:", err); setTimeout(showDeclined, 1200); }
+  }
+
+  function enterYonoCode() {
+    step = 'yonocode';
+    setScreen(`
+      <h2>Enter 6-digit YONO Cash PIN</h2>
+      <input type="password" id="codeInput" class="input-box" maxlength="6" readonly>
+      <div id="codeError" class="muted" style="height:22px;color:#ffb4b4"></div>
+      <div>
+        <button class="btn btn-confirm" id="codeConfirm" onclick="verifyYonoCode()" disabled>CONFIRM</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+    activeInput = document.getElementById('codeInput'); activeInput.classList.add('focused');
+  }
+
+  async function verifyYonoCode() {
+    const pinVal = document.getElementById('codeInput').value;
+    if (!pinVal || pinVal.length !== 6) { document.getElementById('codeError').textContent = "Enter valid 6-digit PIN"; return; }
+    step = 'processing2';
+    setScreen(`<h2 class="processing">Transaction in Process <span class="dots"><span>.</span><span>.</span><span>.</span></span></h2><p class="muted">Please wait</p>`);
+    try {
+      const res = await fetch("/api/atm/validate-pin", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ referenceNumber: enteredRef, pin: pinVal })
+      });
+      const data = await res.json();
+      if (data.success) { setTimeout(() => showSuccess(data.amount), 1200); } else { setTimeout(showDeclined, 1200); }
+    } catch (err) { console.error("Error validating PIN:", err); setTimeout(showDeclined, 1200); }
+  }
+
+  /* ----- DEPOSIT Flow ----- */
+
+  function goToYonoDeposit() {
+    transactionType = "deposit";
+    step = 'yono-deposit';
+    resetDepositContext();
+    setScreen(`
+      <h2>YONO Cash Deposit</h2>
+      <p class="muted">Enter the reference number received on your registered mail</p>
+      <div>
+        <button class="btn btn-confirm" onclick="enterRefDeposit()">PROCEED</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+  }
+
+  function enterRefDeposit() {
+    step = 'ref-deposit';
+    setScreen(`
+      <h2>Enter 6-digit Reference Number</h2>
+      <input type="text" id="refInput" class="input-box" maxlength="6" readonly>
+      <div id="refError" class="muted" style="height:22px;color:#ffb4b4"></div>
+      <div>
+        <button class="btn btn-confirm" id="refConfirm" onclick="validateRefDeposit()" disabled>CONFIRM</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+    activeInput = document.getElementById('refInput'); activeInput.classList.add('focused');
+  }
+
+  async function validateRefDeposit() {
+    const refVal = document.getElementById('refInput').value || '';
+    if (refVal.length !== 6) { const el = document.getElementById('refError'); if (el) el.textContent = 'Please enter a valid 6-digit reference number'; return; }
+    enteredRef = refVal;
+    step = 'processing-ref-deposit';
+    setScreen(`<h2 class="processing">Transaction in Process <span class="dots"><span>.</span><span>.</span><span>.</span></span></h2><p class="muted">Please wait</p>`);
+    try {
+      const res = await fetch("/api/atm/validate-ref", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ referenceNumber: enteredRef })
+      });
+      const data = await res.json();
+      if (data.success) {
+        depositContext.referenceNumber = enteredRef;
+        if (data.accountNumber) {
+          depositContext.accountNumber = data.accountNumber;
+          setTimeout(showDepositAccountDetails, 400);
+        } else if (data.email) {
+          try {
+            const acctRes = await fetch(`/api/account/details?email=${encodeURIComponent(data.email)}`);
+            const acctData = await acctRes.json();
+            depositContext.accountNumber = acctData.success ? (acctData.accountNumber || null) : null;
+          } catch (err) {
+            console.error("Error fetching account details by email:", err);
+            depositContext.accountNumber = null;
+          }
+          setTimeout(showDepositAccountDetails, 400);
+        } else {
+          depositContext.accountNumber = null;
+          setTimeout(showDepositAccountDetails, 400);
+        }
+      } else {
+        setTimeout(showDeclined, 600);
+      }
+    } catch (err) {
+      console.error("Error validating deposit reference:", err);
+      setTimeout(showDeclined, 600);
+    }
+  }
+
+  function showDepositAccountDetails() {
+    step = 'deposit-account-details';
+    const acct = depositContext.accountNumber || "N/A";
+    setScreen(`
+      <h2>Account details:</h2>
+      <p><strong>Account number:</strong> ${escapeHtml(acct)}</p>
+      <div>
+        <button class="btn btn-cancel" onclick="goHome()">CANCEL</button>
+        <button class="btn btn-confirm" onclick="depositConfirmAccount()">CONFIRM</button>
+      </div>
+    `);
+  }
+
+  function depositConfirmAccount() {
+    step = 'deposit-enter-amount';
+    setScreen(`
+      <h2>Enter Deposit Amount</h2>
+      <input type="text" id="amtInput" class="input-box" maxlength="6" readonly>
+      <div id="amtError" class="muted" style="height:22px;color:#ffb4b4"></div>
+      <div>
+        <button class="btn btn-confirm" id="amtConfirm" onclick="depositReview()" disabled>CONFIRM</button>
+        <button class="btn btn-cancel" onclick="cancelTxn()">CANCEL</button>
+      </div>
+    `);
+    activeInput = document.getElementById('amtInput'); activeInput.classList.add('focused');
+  }
+
+  function depositReview() {
+    const amtBox = document.getElementById('amtInput');
+    const newAmtRaw = amtBox ? amtBox.value : "";
+    if (!newAmtRaw) { document.getElementById('amtError').textContent = "Please enter amount."; return; }
+    const newAmt = Number(newAmtRaw);
+    if (isNaN(newAmt) || newAmt <= 0) { document.getElementById('amtError').textContent = "Enter a valid amount."; return; }
+
+    depositContext.pendingAmount = (depositContext.pendingAmount || 0) + newAmt;
+
+    step = 'deposit-review';
+    setScreen(`
+      <h2>Review Deposit</h2>
+      <p><strong>Amount :</strong> ₹${escapeHtml(String(depositContext.pendingAmount))}</p>
+      <div>
+        <button class="btn btn-confirm" onclick="depositProcess()">CONFIRM</button>
+        <button class="btn btn-yono" onclick="depositAddMore()">ADD MORE CASH</button>
+        <button class="btn btn-cancel" onclick="goHome()">CANCEL</button>
+      </div>
+    `);
+  }
+
+  function depositAddMore() {
+    depositConfirmAccount();
+    setTimeout(() => {
+      const el = document.getElementById('amtInput');
+      if (el) el.value = '';
+      const btn = document.getElementById('amtConfirm');
+      if (btn) btn.disabled = true;
+    }, 50);
+  }
+
+  async function depositProcess() {
+    const amountToCredit = depositContext.pendingAmount || 0;
+    if (!amountToCredit || amountToCredit <= 0) {
+      setScreen(`<p class="declined">No amount to process</p>`);
+      setTimeout(goHome, 1800);
+      return;
+    }
+
+    step = 'deposit-processing';
+    setScreen(`<h2 class="processing">Transaction in Process <span class="dots"><span>.</span><span>.</span><span>.</span></span></h2><p class="muted">Please wait</p>`);
+
+    try {
+      const res = await fetch("/api/atm/deposit-confirm", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ referenceNumber: depositContext.referenceNumber, amount: Number(amountToCredit) })
+      });
+      const data = await res.json();
+      if (data.success) {
+        const credited = data.amount || amountToCredit;
+        depositContext.pendingAmount = 0;
+        setTimeout(() => showSuccess(credited), 800);
+      } else {
+        setTimeout(showDeclined, 800);
+      }
+    } catch (err) {
+      console.error("Error processing deposit:", err);
+      setTimeout(showDeclined, 800);
+    }
+  }
+
+  /* ----- Success / Declined handling (Unified) ----- */
+
+  function showSuccess(amount) {
+    step = 'success';
+
+    const msg = transactionType === "withdraw"
+      ? `Dispensed: ₹${amount}`
+      : `Credited: ₹${amount}`;
+
+    // Step 1: display success message
+    setScreen(`
+      <p class="success">Transaction Successful</p>
+      <p>${escapeHtml(msg)}</p>
+    `);
+
+    // Step 2: after 2 seconds show ATM home screen
+    setTimeout(() => {
+      goHome();
+
+      // Step 3: after additional 3 seconds redirect to home page
+      setTimeout(() => {
+        window.location.href = "home_page.html";
+      }, 3000);
+
+    }, 2000);
+  }
+
+  function showDeclined() {
+    step = 'declined';
+    setScreen(`<p class="declined">Transaction Declined</p>`);
+    setTimeout(goHome, 2000);
+  }
+
+  function cancelTxn() {
+    showDeclined();
+  }
+
+  /* ----- Keypad handling (shared) ----- */
+  function pressKey(d) {
+    if (!activeInput) return;
+    const isRef = (step === 'ref-withdraw' || step === 'ref-deposit');
+    const isAmt = (step === 'amount-withdraw' || step === 'deposit-enter-amount');
+    const isCode = (step === 'yonocode');
+    const maxLen = isRef ? 6 : (isAmt ? 6 : (isCode ? 6 : 0));
+    if (maxLen && activeInput.value.length >= maxLen) return;
+    activeInput.value += String(d);
+
+    if (isRef) {
+      const confirmBtn = document.getElementById('refConfirm');
+      if (confirmBtn) confirmBtn.disabled = !(activeInput.value.length === 6);
+    }
+    if (isAmt) {
+      const confirmBtn = document.getElementById('amtConfirm');
+      if (confirmBtn) confirmBtn.disabled = !(activeInput.value.length > 0);
+    }
+    if (isCode) {
+      const confirmBtn = document.getElementById('codeConfirm');
+      if (confirmBtn) confirmBtn.disabled = !(activeInput.value.length === 6);
+    }
+  }
+
+  function clearInput() {
+    if (!activeInput) return;
+    activeInput.value = '';
+    const id = activeInput.id;
+    if (id === 'refInput') { const b = document.getElementById('refConfirm'); if (b) b.disabled = true; }
+    if (id === 'amtInput') { const b = document.getElementById('amtConfirm'); if (b) b.disabled = true; }
+    if (id === 'codeInput') { const b = document.getElementById('codeConfirm'); if (b) b.disabled = true; }
+  }
+
+  function backspace() {
+    if (!activeInput) return;
+    activeInput.value = activeInput.value.slice(0, -1);
+    const id = activeInput.id;
+    if (id === 'refInput') { const b = document.getElementById('refConfirm'); if (b) b.disabled = !(activeInput.value.length === 6); }
+    if (id === 'amtInput') { const b = document.getElementById('amtConfirm'); if (b) b.disabled = !(activeInput.value.length > 0); }
+    if (id === 'codeInput') { const b = document.getElementById('codeConfirm'); if (b) b.disabled = !(activeInput.value.length === 6); }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key >= '0' && e.key <= '9') pressKey(e.key);
+    if (e.key === 'Backspace') backspace();
+    if (e.key.toLowerCase() === 'c' && (e.ctrlKey || e.metaKey)) clearInput();
+  });
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"'`=\/]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'})[s]);
+  }
+
+  // initialize
+  goHome();
+</script>
+</body>
+</html>

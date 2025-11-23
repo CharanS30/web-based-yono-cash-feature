@@ -1,0 +1,595 @@
+<html>
+
+<head>
+    <title>home_page</title>
+    <link rel="stylesheet" href="home_page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar_icon recent_activities">
+            <i class="fa-solid fa-clock-rotate-left fa-flip-vertical"></i>
+
+            <div class="slide_content">
+                <div class="slide_header">
+                    <div class="sidebar_icon recent_activities slide_icon">
+                        <i class="fa-solid fa-clock-rotate-left fa-flip-vertical"></i>
+                    </div>
+                    <h5>My Recent online activities</h5>
+                </div>
+                <div class="slide_info">
+                    <h6>Last login password change:</h6>
+                    <p> date time </p>
+                    <h6>Previous site visit:</h6>
+                    <p> date time </p>
+                    <h6>Last failed login attempt:</h6>
+                    <p> date time </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar_icon tip_of_day">
+            <i class="fa-solid fa-lightbulb"></i>
+
+            <div class="slide_content">
+                <div class="slide_header">
+                    <div class="sidebar_icon tip_of_day slide_icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h5>Tip of the day</h5>
+                </div>
+                <div class="slide_info">
+                    <h6>Bill Payments</h6>
+                    <p> Use our hassle free bill payment facility to avoid queue for paying your utility bills.</p>
+                    <span><a href="#">Click here</a></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar_icon imp_links">
+            <i class="fa-solid fa-circle-nodes"></i>
+
+            <div class="slide_content">
+                <div class="slide_header">
+                    <div class="sidebar_icon imp_links slide_icon">
+                        <i class="fa-solid fa-circle-nodes"></i>
+                    </div>
+                    <h5>Important Links</h5>
+                </div>
+                <div class="slide_info">
+                    <ul type="none">
+                        <li><a href="#">Products and Services</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Rates</a></li>
+                        <li><a href="#">Forms</a></li>
+                        <li><a href="#">Site Map</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar_icon beneficiary">
+            <i class="fa-regular fa-user"></i>
+            <div class="slide_content">
+                <div class="slide_header">
+                    <div class="sidebar_icon beneficiary slide_icon">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <h5>Add & Manage Beneficiary</h5>
+                </div>
+                <div class="slide_info">
+                    <ul type="none">
+                        <li><a href="#">SBI Beneficiary</a></li>
+                        <li><a href="#">Other Bank Beneficiary</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar_icon favourite">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <div class="slide_content">
+                <div class="slide_header">
+                    <div class="sidebar_icon favourite slide_icon">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </div>
+                    <h5>Favourites</h5>
+                </div>
+                <div class="slide_info">
+                    <ul type="none">
+                        <li><a href="#">--Manage Favourite--</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- body-content -->
+
+    <div class="content">
+        <header>
+            <div class="logo">
+                <img src="login_images/logo.png" alt="logo" height="70px" width="110px">
+            </div>
+            <div class="header_content">
+                <div class="link_and_images">
+                    <div class="link_lang">
+                        <a href="#">What's New </a>
+                        <a href="#">About OnlineSBI </a>
+                        <a href="#">Registration Forms </a>
+                        <select class="lang_menu">
+                            <option hidden>Language</option>
+                            <option>English</option>
+                            <option>Hindi</option>
+                            <option>Tamil</option>
+                            <option>Telugu</option>
+                            <option>Kannada</option>
+
+                        </select>
+                    </div>
+                    <div class="images">
+                        <img src="home_page_images/links_image.png" width="100%">
+                    </div>
+                </div>
+                <div class="logout">
+                    <div class="logout_icon">
+                        <i class="fa-solid fa-power-off" onclick="window.location.href='logout_page.html'"></i>
+                    </div>
+                    <P> LOGOUT</P>
+                </div>
+            </div>
+        </header>
+
+        <!-- navigation-bar -->
+        <nav>
+            <div class="box box1">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+                <p id="p1"> My Accounts & Profile</p>
+                <div class="dropdown">
+                    <div class="menu">Account Summary</div>
+                    <div class="menu">Account Statement</div>
+                    <div class="menu">Profile</div>
+                    <div class="menu">e-Statement</div>
+                    <div class="menu">Pending Statement</div>
+                    <div class="menu">Spend Analyzer</div>
+                    <div class="menu">Know your CIBIL Score</div>
+                    <div class="menu">SBI Rewards</div>
+                    <div class="menu">Set Favourite Links</div>
+                    <div class="menu">E-KYC Through Aadhar</div>
+                    <div class="menu" id="NB">More>></div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-right-left"></i>
+                    </div>
+                </div>
+                <p>Payments / Transfers</p>
+                <div class="dropdown">
+                    <div class="menu">Add & Manage Beneficiary</div>
+                    <div class="menu">Funds Transfer (Own SBI A/c)</div>
+                    <div class="menu">Accounts of Others - Within SBI (एस बी आई का खाताधारक)</div>
+                    <div class="menu">Other Bank Transfer (अन्य बैंकों का खाताधारक)</div>
+                    <div class="menu">IMPS Funds Transfer</div>
+                    <div class="menu">VAN (Virtual Account Number) Funds Transfer</div>
+                    <div class="menu">Quick Transfer (Without Adding Beneficiary)</div>
+                    <div class="menu" id="NB">More>></div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+                </div>
+                <p> Bill Payments</p>
+                <div class="dropdown">
+                    <div class="menu">Pay Bills</div>
+                    <div class="menu">Payment History</div>
+                    <div class="menu">Topup Recharge</div>
+                    <div class="menu">SBI General Premium</div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                </div>
+                <p> Deposit & Investment</p>
+                <div class="dropdown">
+                    <div class="menu">Deposit</div>
+                    <div class="menu">National Pension System (NPS)</div>
+                    <div class="menu">Public Provident Fund (PPF)</div>
+                    <div class="menu">Demat and Trading Account</div>
+                    <div class="menu">Senior Citizens Savings Scheme(SCSS) Account</div>
+                    <div class="menu">SBI Mutual Fund</div>
+                    <div class="menu">SBI General Insurance</div>
+                    <div class="menu" id="NB">Online MSSC Account Opening</div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                </div>
+                <p> e-Tax</a>
+                <div class="dropdown">
+                    <div class="menu">State Govt. Taxes</div>
+                    <div class="menu">Indirect Taxes</div>
+                    <div class="menu">Direct Taxes</div>
+                    <div class="menu">Reprint Challan/Receipt</div>
+                    <div class="menu">More>></div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-computer-mouse"></i>
+                    </div>
+                </div>
+                <p> e-Services</a>
+                <div class="dropdown">
+                    <div class="menu">Debit Card Services</div>
+                    <div class="menu">e-Cards</div>
+                    <div class="menu">My Certificates</div>
+                    <div class="menu">Submit 15G/15H</div>
+                    <div class="menu">Link Minor SSA PPF accounts on INB</div>
+                    <div class="menu">Transfer of Account</div>
+                    <div class="menu">ASBA (Application Supported by Blocked Amount) Services</div>
+                    <div class="menu">Digi Locker</div>
+                    <div class="menu">Loans</div>
+                    <div class="menu">More>></div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                </div>
+                <p> Request & Enquiries</a>
+                <div class="dropdown">
+                    <div class="menu">Standing Instruction</div>
+                    <div class="menu">Standing Instruction for PPF</div>
+                    <div class="menu">Status Enquiry</div>
+                    <div class="menu">Find Transactions</div>
+                    <div class="menu">Generation of Form A2</div>
+                    <div class="menu">Upgrade CSP Variant</div>
+                    <div class="menu">Know your Relationship Manager</div>
+                    <div class="menu">More>></div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="icon">
+                    <div class="icon_design">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                </div>
+                <p> Useful Links</a>
+                <div class="dropdown">
+                    <div class="menu">SBI Loans</div>
+                    <div class="menu">Credit Cards</div>
+                    <div class="menu">Gold Loan</div>
+                    <div class="menu">SBI Wealth</div>
+                    <div class="menu">Site Map</div>
+                    <div class="menu">More>></div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- display detials -->
+        <div class="display_details">
+            <div class="login_date_time">
+                <p style="color:rgb(134, 14, 14); font-weight: 600;">Last Login Date & Time</p>
+                <p style="color:rgba(0, 0, 0, 0.6)">login-date&emsp;&emsp;&emsp;[login-time]</p>
+            </div>
+            <div class="welcome_note">
+                <div class="name_email">
+                    <p style="color:rgba(0, 0, 0, 0.74); font-weight: 600;">Welcome</p>
+                    <p id="usernameDisplay" style="color:purple; font-weight: 600;">user</p>
+                    <p id="emailDisplay" style="color:purple; font-weight: 600;">email</p>
+                </div>
+                <div class="logout_date_time">
+                    <p>logout-date</p>
+                    <p>[logout-time]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- main content -->
+
+        <div class="main_content">
+            <div class="sidepanel">
+                <div class="quick_links">
+                    Quick Links
+                    <i class="fa-solid fa-greater-than"></i>
+                    <div class="drop_down_right">
+                        <div class="menu_list">Account Statement</div>
+                        <div class="menu_list">Bill Payments</div>
+                        <div class="menu_list" id="openYono">YONO CASH</div>
+                    
+
+                    </div>
+                </div>
+                <div class="LOC">
+                    <div class="list_of_contents">
+                        <div class="list_item" id="l1">Account Summary</div>
+                        <div class="list_item">Account Statement</div>
+                        <div class="list_item">
+                            Profile
+                            <p id="down_arrow"> &#9660</p>
+                        </div>
+                        <div class="list_item">e-Statement</div>
+                        <div class="list_item">Pending Statement</div>
+                        <div class="list_item">Spend Analyzer</div>
+                        <div class="list_item">Know your CIBIL Score</div>
+                        <div class="list_item">SBI Rewards</div>
+                        <div class="list_item">Select your Segment</div>
+                        <div class="list_item">Set Favourite Links</div>
+                        <div class="list_item">Disable Accounts for UPI</div>
+                        <div class="list_item">E-KYC Through Aadhar</div>
+                    </div>
+                </div>
+                <div class="slideshow">
+                    <div class="heading">
+                        <i class="fa-solid fa-tag fa-flip-horizontal"></i>
+                        <p>FEATURES/OFFERS</p>
+                    </div>
+                    <div class="message">
+                        <p>Open Demat account with zero A/c opening charges <a href="#">Click Here</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- content-definition -->
+            <div class="content_definition">
+                <div class="credit_card">
+                    <div class="icon_cc">
+                        <div class="dollar_icon">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <p id="cc1"> SBI Credit Card</p>
+                        <i class="fa-solid fa-xmark" id="cross"
+                            onclick="this.closest('.credit_card').style.display='none'"></i>
+                    </div>
+                    <a href="#">Welcome Gift worth up to Rs.5,000 awaits you! Click here to Apply or Resume or Track
+                        your Application for SBI Credit Card!</a>
+                    <p id="cc2">*T&C apply.</p>
+                </div>
+
+                <div class="content_headings">
+                    <div class="current_status">
+                        <p>You are here: / </p>
+                        <p><a href="#"> My Accounts & Profile / </a></p>
+                        <p>Account Summary</p>
+                    </div>
+                </div>
+
+                <!-- transaction details -->
+                <div class="transaction_details">
+                    <div class="transaction_account">
+                        <div class="dollar_icon">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <p id="ta1">Transaction Accounts</p>
+                    </div>
+
+                    <div class="account_details">
+                        <div class="ac_headings">
+                            <p id="ac">Account No. / Name</p>
+                            <p id="ac">Branch</p>
+                            <p id="ac">Available Balance</p>
+                        </div>
+                        <div class="ac_info">
+                            <p id="accountNumber">Loading...</p>
+                            <p id="acp2">Nagavara</p>
+                            <!-- <a href="#" id="a1" onclick="showBalance()">Click here for balance</a> -->
+                            <p id="checkBalance" class="balance-link" style="color: blue; cursor: pointer; text-decoration: underline;">
+                            Click here to check Balance
+                            </p>
+                        </div>
+                    </div>
+                    <div class="nomination">
+                        <a href="#" id="a3">View Nomination and PAN Details</a>
+                    </div>
+                    <div class="all_balance">
+                        <a href="#" id="a4">View All Balances</a>
+                    </div>
+                </div>
+
+                <!-- DISCLAIMER  -->
+
+                <div class="disclaimer">
+                    <div class="bulb_icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <ul>
+                        <li>If you have any hidden accounts, please unhide through the tab Profile > Manage A/c Display
+                            > UnHide Accounts or UnHide Debit Accounts.</li>
+                        <li>Capital Gains Plus Account can be viewed under Deposit Accounts.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER  -->
+
+        <footer>
+            <hr style="margin: 0; border:none; height:4px; background-color: #2B1D66;">
+            <hr style="margin: 0; border:none; height:3px; background-color: #2577B4;">
+            <div class="footerHeadings">
+                <div class="fHeadings">
+                    <div class="fhlinks"><a href="#">Privacy Statement</a></div>
+                    <div class="fhlinks"><a href="#">Disclosure</a></div>
+                    <div class="fhlinks"><a href="#">Terms of Service(Terms & Conditions)</a></div>
+                    <div><a href="#">Site Map</a></div>
+                </div>
+            </div>
+            <div class="copywrite">
+                <p>© State Bank of India</p>
+                <p>Site best viewed at 1024 x 768 resolution in Microsoft Edge 79 +, Mozilla 96 +, Google Chrome 97 +
+                </p>
+            </div>
+        </footer>
+
+    </div> <!-- main div  -->
+
+<!-- ===============  yono cash-->
+<!-- YONO CASH POPUP (updated UI) -->
+<div id="yonoModal" class="yono-modal" role="dialog" aria-modal="true" aria-labelledby="yonoHeader" style="display:none;">
+  <div class="yono-content" tabindex="-1">
+    <!-- Choice Screen: Deposit or Withdraw -->
+    <div class="yono-step yono-choice active" data-flow="choice">
+      <h3 id="yonoHeader" class="yono-header">YONO Cash</h3>
+      <p>Select transaction type</p>
+      <div class="yono-choice-buttons">
+        <button class="btn-choice" data-type="withdraw" aria-pressed="false">Withdraw</button>
+        <button class="btn-choice" data-type="deposit" aria-pressed="false">Deposit</button>
+      </div>
+      <div class="yono-actions">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+
+    <!-- WITHDRAW FLOW (keeps original steps; step indices preserved) -->
+    <!-- Withdraw: Step 1 -->
+    <div class="yono-step withdraw-step withdraw-step-1" data-flow="withdraw" hidden>
+      <h3 class="yono-header">YONO Cash</h3>
+      <label>Account Number</label>
+      <input type="text" id="popupAccountNumber" readonly><br><br>
+
+      <label>Delivery Option</label>
+      <input type="text" value="Virtual ATM" readonly><br><br>
+
+      <label>Amount</label>
+      <input id="yonoAmount" type="number" placeholder="Enter Amount" min="1"><br><br>
+
+      <div class="yono-actions">
+        <button class="btn-next withdraw-next">Next</button>
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+
+    <!-- Withdraw: Step 2 - PIN -->
+    <div class="yono-step withdraw-step withdraw-step-2" data-flow="withdraw" hidden>
+      <h3 class="yono-header">Create PIN</h3>
+      <input id="yonoPin" type="password" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit PIN"><br><br>
+
+      <div class="yono-actions">
+        <button class="btn-back withdraw-back">Back</button>
+        <button class="btn-next withdraw-next-2">Next</button>
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+
+    <!-- Withdraw: Step 3 - Review -->
+    <div class="yono-step withdraw-step withdraw-step-3" data-flow="withdraw" hidden>
+      <h3 class="yono-header">Review & Confirm</h3>
+      <p><strong>Account:</strong> <span id="reviewAccount">xxxx1234</span></p>
+      <p><strong>Delivery Option:</strong> Virtual ATM</p>
+      <p><strong>Amount:</strong> ₹<span id="reviewAmount">0</span></p>
+
+      <label>
+        <input type="checkbox" id="agreeCheck"> I agree to the <i class="terms-text">terms & Conditions</i>
+      </label><br><br>
+
+      <div class="yono-actions">
+        <button class="btn-back withdraw-back">Back</button>
+        <button class="btn-confirm" disabled>Confirm</button>
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+
+    <!-- Withdraw: Step 4 - Success -->
+    <div class="yono-step withdraw-step withdraw-step-4" data-flow="withdraw" hidden>
+      <h3 class="yono-header">YONO Cash</h3>
+      <p class="success-msg">
+        Thank you for using YONO cash service. Please use the YONO cash transaction number sent to your
+        registered email and the PIN set by you at the virtual ATM to experience this feature.
+      </p>
+      <p class="success-note"><strong>Note:</strong> Never share sensitive info with anyone.</p>
+      <p>Your request is valid till next 4 hours.</p>
+      <div class="yono-actions">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+
+    <!-- DEPOSIT FLOW (separate flow) -->
+    <!-- Deposit: Step 1 - Info & Request -->
+    <div class="yono-step deposit-step deposit-step-1" data-flow="deposit" hidden>
+      <h3 class="yono-header">Deposit Cash</h3>
+      <div class="deposit-top-points">
+        <p>• Deposit Cash at CDM</p>
+        <p>• Instant credit in account</p>
+      </div>
+
+      <div class="deposit-middle">
+        <p><strong>Deposit Account:</strong></p>
+        <!-- show masked account with last 4 digits; JS will populate -->
+        <p id="depositMaskedAccount">********1234</p>
+      </div>
+
+      <div class="yono-actions">
+        <button class="btn-deposit-request">Request Now</button>
+        <!-- <button class="btn-close">Close</button> -->
+      </div>
+    </div>
+
+    <!-- Deposit: Step 2 - Review & Confirm -->
+    <div class="yono-step deposit-step deposit-step-2" data-flow="deposit" hidden>
+      <h3 class="yono-header">YONO Cash - Review</h3>
+      <p><strong>Deposit Channel:</strong> Cash Deposit Machine (CDM)</p>
+      <p><strong>Account Number:</strong> <span id="reviewDepositAccount">********1234</span></p>
+
+      <label>
+        <input type="checkbox" id="agreeCheckDeposit"> I agree to the <i class="terms-text">terms & Conditions</i>
+      </label><br><br>
+
+      <div class="yono-actions">
+        <button class="btn-back btn-deposit-back">Back</button>
+        <button class="btn-confirm-deposit" disabled>Confirm</button>
+      </div>
+    </div>
+
+    <!-- Deposit: Step 3 - Success (reuses same style as withdraw success) -->
+    <div class="yono-step deposit-step deposit-step-3" data-flow="deposit" hidden>
+      <h3 class="yono-header">YONO Cash</h3>
+      <p class="success-msg">
+        Thank you for using YONO cash service. Please use the YONO cash transaction number sent to your
+        registered email.
+      </p>
+      <p class="success-note"><strong>Note:</strong> Never share sensitive info with anyone.</p>
+      <p>Your deposit request is valid till next 4 hours.</p>
+
+      <div class="yono-actions">
+        <button class="btn-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <script src="home_page.js"></script>
+
+</body>
+
+</html>

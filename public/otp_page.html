@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <title>Otp webpage</title>
+    <link rel="stylesheet" href="otp_page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="sbi_logo"></div>
+        <div class="first_sec">
+            <div class="header_links">
+                <a href="#" id="a1">About Online SBI | </a>
+                <a href="#"> Registration Forms</a>
+            </div>
+            <div class="header_images">
+                <img src="otp_page_images/header_images.png" height="30" width="300">
+            </div>
+        </div>
+        <div class="logout">
+            <div class="logout_icon">
+                <i class="fa-solid fa-power-off" onclick="window.location.href='logout_page.html'"></i>
+            </div>
+            <P> LOGOUT</P>
+        </div>
+    </header>
+
+    <div class="blue_line"></div>
+
+    <div class="second_sec">
+        <div class="sec1">
+            <p> login-date&emsp; [login-time]</p>
+        </div>
+        <div class="sec2">
+            <p>Welcome</p>
+            <p style="color: purple;" id="p2">User Name</p>
+        </div>
+    </div>
+
+    <div class="third_Sec">
+        <b>
+            <p>Login Second Factor Authentication</p>
+        </b>
+    </div>
+
+    <div class="fourth_sec">
+        <p id="fourthp1"> Enter the One Time Password sent to your mobile phone</p>
+        <p id="fourthp2"><i>Mandatory fields are marked with an asterisk(*)</i></p>
+        <div class="otp">
+            <p id="otp"> One Time Password <sup style="color: red;">*</sup></p>
+            <input type="text" class="otpinput" name="otp" maxlength="6"><br />
+        </div>
+        <div class="submit_button">
+            <button id="submitbtn" onclick="window.location.href='home_page.html'"><b>Submit</b></button>
+        </div>
+        <div class="fourth_last">
+            <p id="last"> If you did not recieve the High Security Password on SMS,you can </p>
+            <button id="button2">Click here to resend the OTP</button>
+        </div>
+    </div>
+
+    <div class="cream_content">
+        <div class="bulb_icon">
+            <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <div class="cream_text">
+            <ul>
+                <li>Please note that all communication related to Intenet banking will be sent on your registered mobile
+                    number.</li>
+                <li>State Bank or any of its representative never sends you email/SMS or calls you over phone to get
+                    your personal information,password or one time SMS
+                    (high security) password. Any such e-mail/SMS or phone call is an attempt to fraudulently withdraw
+                    money from your account through Internet Banking. Never respond to such e-mail/SMS or phone call.
+                    Please report immediately on <a href="#">report.phising@sbi.co.in</a> if you recieve any such
+                    email-/SMS or Phone call. Immediately change your passwords if you have accidently revealed your
+                    credentials.</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr id="hr1">
+    <hr id="hr2">
+    <footer>
+        <div class="blue"></div>
+        <div class="footerHeadings">
+            <div class="fHeadings">
+                <div class="fhlinks"><a href="#">Privacy Statement</a></div>
+                <div class="fhlinks"><a href="#">Disclosure</a></div>
+                <div class="fhlinks"><a href="#">Terms of Service(Terms & Conditions)</a></div>
+                <div><a href="#">Site Map</a></div>
+            </div>
+        </div>
+        <div class="copywrite">
+            <p>© State Bank of India</p>
+            <p>Site best viewed at 1024 x 768 resolution in Microsoft Edge 79 +, Mozilla 96 +, Google Chrome 97 +</p>
+        </div>
+    </footer>
+    <script src="otp_page.js"></script>
+</body>
+
+</html>
