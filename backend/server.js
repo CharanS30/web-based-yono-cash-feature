@@ -1,3 +1,4 @@
+// backend/server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -8,13 +9,13 @@ dotenv.config();
 
 const app = express();
 
-// 🔥 IMPORTANT: Serve static frontend from /public folder (public is outside backend)
-app.use(express.static(path.join(__dirname, "../public")));
+// serve static files from public (must be before routes)
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.use(express.json());
 app.use(cors());
 
-// --- Your existing routes here ---
+// Routes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
@@ -27,37 +28,32 @@ app.use("/api/account", accountRoutes);
 const atmRoutes = require("./routes/atmRoutes");
 app.use("/api/atm", atmRoutes);
 
-// -----------------------------------------------
-// 🔥 DEFAULT ROUTE: When hitting "/" show login_page.html
-// -----------------------------------------------
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/login_page.html"));
-});
-
-// -----------------------------------------------
-// OPTIONAL: For any unknown GET route (except /api/*) → show login page
-// prevents "Cannot GET /something"
-// -----------------------------------------------
-app.get("*", (req, res) => {
-  if (req.method === "GET" && !req.path.startsWith("/api/")) {
-    return res.sendFile(path.join(__dirname, "../public/login_page.html"));
-  }
-  res.status(404).send("Not Found");
-});
-
-// -----------------------------------------------
-// DB + Server Start
-// -----------------------------------------------
-const PORT = process.env.PORT || 5000;
+// DB connection (fallback safe message if env var missing)
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
+if (!MONGO_URI) {
+  console.warn("⚠️ MONGO_URI not set. Using local mongo if available.");
+}
 
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB connected");
-    app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+  .connect(MONGO_URI || "mongodb://localhost:27017/yono_sbi", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    // still start server so Render does not fail healthcheck
-    app.listen(PORT, () => console.log(`Server running (DB error) on ${PORT}`));
-  });
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// Serve login_page.html on root "/"
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "login_page.html"));
+});
+
+// Catch-all: serve login_page.html for other non-API routes (SPA support)
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api/")) {
+    return res.status(404).send("Not found");
+  }
+  return res.sendFile(path.join(__dirname, "..", "public", "login_page.html"));
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
