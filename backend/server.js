@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 });
 
 // Catch-all: serve login_page.html for other non-API routes (SPA support)
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   if (req.path.startsWith("/api/")) {
     return res.status(404).send("Not found");
   }
