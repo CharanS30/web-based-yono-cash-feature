@@ -47,13 +47,15 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "login_page.html"));
 });
 
-// Catch-all: serve login_page.html for other non-API routes (SPA support)
-app.get("/*", (req, res) => {
-  if (req.path.startsWith("/api/")) {
-    return res.status(404).send("Not found");
-  }
+// Safe catch-all middleware for non-API routes (avoids path-to-regexp issues)
+app.use((req, res, next) => {
+  // If request is an API call, pass to next (so 404s or API handlers apply)
+  if (req.path.startsWith('/api/')) return next();
+
+  // Otherwise serve the SPA entry (login_page)
   return res.sendFile(path.join(__dirname, "..", "public", "login_page.html"));
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
