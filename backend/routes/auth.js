@@ -5,16 +5,32 @@ const Otp = require("../models/Otp");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 
-// Nodemailer transporter (make sure EMAIL_USER and EMAIL_PASS are in backend/.env)
+// Nodemailer transporter (make sure EMAIL_USER and EMAIL_PASS are set in Render env)
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // use STARTTLS
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    tls: {
+        // Allow self-signed certs (safe for Render outgoing SMTP). Remove if not needed.
+        rejectUnauthorized: false
+    }
 });
 
-// Helper: send OTP (handles registration/login)
+// Verify transporter at startup (helps catch auth/DNS errors early in logs)
+transporter.verify()
+  .then(() => {
+    console.log('✅ Nodemailer transporter verified (ready to send mail)');
+  })
+  .catch(err => {
+    console.error('❌ Nodemailer verify failed — check EMAIL_USER / EMAIL_PASS and network:');
+    console.error(err);
+  });
+
+// Helper: send OTP (handles registration/login) — improved error logging
 async function sendOtpEmail(email, otp, type) {
     let subject, text;
     if (type === "register") {
@@ -25,12 +41,24 @@ async function sendOtpEmail(email, otp, type) {
         text = `Dear Customer,\n\nYour OTP for login is: ${otp}\nThis OTP is valid for 5 minutes.\n\nThanks,\nYONO SBI`;
     }
 
-    await transporter.sendMail({
-        from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject,
-        text,
-    });
+    try {
+        const info = await transporter.sendMail({
+            from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject,
+            text,
+        });
+        console.log(`✅ OTP email (${type}) sent to ${email} — messageId: ${info.messageId}`);
+        return info;
+    } catch (err) {
+        // Very detailed logging for Render — copy/paste these lines into chat
+        console.error('❌ Server error while sending OTP:', err && err.message ? err.message : err);
+        // additional fields that nodemailer may provide:
+        if (err.response) console.error('nodemailer response:', err.response);
+        if (err.code) console.error('nodemailer code:', err.code);
+        if (err.stack) console.error(err.stack);
+        throw err;
+    }
 }
 
 // Helper: send account number + IFSC after registration
