@@ -6,19 +6,37 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 
 // Nodemailer transporter (make sure EMAIL_USER and EMAIL_PASS are set in Render env)
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // use STARTTLS
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-        // Allow self-signed certs (safe for Render outgoing SMTP). Remove if not needed.
-        rejectUnauthorized: false
-    }
+const { google } = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
+
+// OAuth2 client setup
+const oauth2Client = new OAuth2(
+    process.env.GMAIL_CLIENT_ID,
+    process.env.GMAIL_CLIENT_SECRET,
+    "https://developers.google.com/oauthplayground"
+);
+
+oauth2Client.setCredentials({
+    refresh_token: process.env.GMAIL_REFRESH_TOKEN
 });
+
+// Create transporter
+async function createTransporter() {
+    const accessToken = await oauth2Client.getAccessToken();
+
+    return nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            type: "OAuth2",
+            user: process.env.EMAIL_USER,
+            clientId: process.env.GMAIL_CLIENT_ID,
+            clientSecret: process.env.GMAIL_CLIENT_SECRET,
+            refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+            accessToken: accessToken?.token || accessToken
+        }
+    });
+}
+
 
 // Verify transporter at startup (helps catch auth/DNS errors early in logs)
 transporter.verify()
@@ -33,23 +51,25 @@ transporter.verify()
 // Helper: send OTP (handles registration/login) — improved error logging
 async function sendOtpEmail(email, otp, type) {
     let subject, text;
+
     if (type === "register") {
         subject = "YONO SBI - Registration OTP";
-        text = `Dear Customer,\n\nYour OTP for registration is: ${otp}\nThis OTP is valid for 5 minutes.\n\nThanks,\nYONO SBI`;
+        text = `Dear Customer,\n\nYour OTP for registration is: ${otp}\nValid for 5 minutes.\n\nThanks,\nYONO SBI`;
     } else {
         subject = "YONO SBI - Login OTP";
-        text = `Dear Customer,\n\nYour OTP for login is: ${otp}\nThis OTP is valid for 5 minutes.\n\nThanks,\nYONO SBI`;
+        text = `Dear Customer,\n\nYour OTP for login is: ${otp}\nValid for 5 minutes.\n\nThanks,\nYONO SBI`;
     }
 
     try {
-        const info = await transporter.sendMail({
+        const transporter = await createTransporter();
+        await transporter.sendMail({
             from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
             to: email,
             subject,
             text,
         });
-        console.log(`✅ OTP email (${type}) sent to ${email} — messageId: ${info.messageId}`);
-        return info;
+        // console.log(`✅ OTP email (${type}) sent to ${email} — messageId: ${info.messageId}`);
+        // return info;
     } catch (err) {
         // Very detailed logging for Render — copy/paste these lines into chat
         console.error('❌ Server error while sending OTP:', err && err.message ? err.message : err);
@@ -61,17 +81,29 @@ async function sendOtpEmail(email, otp, type) {
     }
 }
 
-// Helper: send account number + IFSC after registration
+// ---------------------- Helper: send account details email (OAuth2) ----------------------
+
 async function sendAccountEmail(email, accountNumber, ifsc) {
     const subject = "YONO SBI — Your Account Details";
-    const text = `Congratulations! Your account has been created.\n\nAccount Number: ${accountNumber}\nIFSC: ${ifsc}\n\nThank you for registering with YONO SBI.`;
-    await transporter.sendMail({
-        from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject,
-        text,
-    });
+    const text = `Congratulations! Your account has been created successfully.\n\n` +
+                 `Account Number: ${accountNumber}\n` +
+                 `IFSC: ${ifsc}\n\n` +
+                 `Thank you for registering with YONO SBI.`;    
+
+    try {
+        const transporter = await createTransporter();   // OAuth2 transporter
+        await transporter.sendMail({
+            from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject,
+            text,
+        });
+        console.log("📩 Account details email sent to:", email);
+    } catch (err) {
+        console.error("❌ Failed to send account email:", err);
+    }
 }
+
 
 // ---------------------- Registration ----------------------
 
