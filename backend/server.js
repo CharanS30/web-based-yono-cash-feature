@@ -1,7 +1,4 @@
 // backend/server.js
-app.use(express.json());
-app.use(cors());
-
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -11,6 +8,11 @@ const path = require("path");
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 // serve static files from public (must be before routes)
 app.use(express.static(path.join(__dirname, "..", "public")));
