@@ -60,26 +60,15 @@ async function sendOtpEmail(email, otp, type) {
         text = `Dear Customer,\n\nYour OTP for login is: ${otp}\nValid for 5 minutes.\n\nThanks,\nYONO SBI`;
     }
 
-    try {
-        const transporter = await createTransporter();
-        await transporter.sendMail({
-            from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject,
-            text,
-        });
-        // console.log(`✅ OTP email (${type}) sent to ${email} — messageId: ${info.messageId}`);
-        // return info;
-    } catch (err) {
-        // Very detailed logging for Render — copy/paste these lines into chat
-        console.error('❌ Server error while sending OTP:', err && err.message ? err.message : err);
-        // additional fields that nodemailer may provide:
-        if (err.response) console.error('nodemailer response:', err.response);
-        if (err.code) console.error('nodemailer code:', err.code);
-        if (err.stack) console.error(err.stack);
-        throw err;
-    }
+    const transporter = await createTransporter();
+    await transporter.sendMail({
+        from: `"YONO SBI" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject,
+        text,
+    });
 }
+
 
 // ---------------------- Helper: send account details email (OAuth2) ----------------------
 
