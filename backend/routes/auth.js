@@ -39,14 +39,14 @@ async function createTransporter() {
 
 
 // Verify transporter at startup (helps catch auth/DNS errors early in logs)
-transporter.verify()
-  .then(() => {
-    console.log('✅ Nodemailer transporter verified (ready to send mail)');
-  })
-  .catch(err => {
-    console.error('❌ Nodemailer verify failed — check EMAIL_USER / EMAIL_PASS and network:');
-    console.error(err);
-  });
+// transporter.verify()
+//   .then(() => {
+//     console.log('✅ Nodemailer transporter verified (ready to send mail)');
+//   })
+//   .catch(err => {
+//     console.error('❌ Nodemailer verify failed — check EMAIL_USER / EMAIL_PASS and network:');
+//     console.error(err);
+//   });
 
 // Helper: send OTP (handles registration/login) — improved error logging
 async function sendOtpEmail(email, otp, type) {
